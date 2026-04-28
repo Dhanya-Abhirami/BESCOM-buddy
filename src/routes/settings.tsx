@@ -50,7 +50,6 @@ function SettingsPage() {
       <div className="mb-10">
         <div className="font-mono text-xs uppercase tracking-[0.3em] text-accent">Configuration</div>
         <h1 className="mt-2 font-display text-4xl font-bold tracking-tight">Agent Settings</h1>
-        <p className="mt-2 font-kannada text-lg text-muted-foreground">ಸಹಾಯಕ ಸಂರಚನೆ</p>
         <p className="mt-3 text-sm text-muted-foreground">
           The AI shares these details with BESCOM only when asked. Stored locally in your browser.
         </p>
@@ -60,7 +59,7 @@ function SettingsPage() {
         {/* Personal */}
         <section className="rounded-2xl border border-border bg-card/60 p-6">
           <h2 className="mb-1 font-display text-lg font-semibold">Personal details</h2>
-          <p className="mb-5 font-kannada text-sm text-muted-foreground">ವೈಯಕ್ತಿಕ ವಿವರಗಳು</p>
+          <p className="mb-5 text-sm text-muted-foreground">Used by the AI when BESCOM asks for them.</p>
 
           <div className="space-y-5">
             <Field

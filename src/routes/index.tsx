@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Zap, Phone, MessageSquare, Brain, Shield, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import powerGridHero from "@/assets/power-grid-hero.jpg";
+import electricCurrent from "@/assets/electric-current.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -17,6 +19,7 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "AI agent that reports power cuts to BESCOM in Kannada — naturally and politely.",
       },
+      { property: "og:image", content: powerGridHero },
     ],
   }),
   component: Home,
@@ -27,7 +30,17 @@ function Home() {
     <div className="relative">
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="grid-bg absolute inset-0 opacity-40" />
+        <div className="absolute inset-0">
+          <img
+            src={powerGridHero}
+            alt="High-voltage transmission grid at twilight with arcing electricity"
+            width={1920}
+            height={1080}
+            className="h-full w-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background" />
+        </div>
+        <div className="grid-bg absolute inset-0 opacity-30" />
         <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -48,11 +61,7 @@ function Home() {
               — without lifting a finger.
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl font-kannada text-2xl text-foreground/80 md:text-3xl">
-              ಬೆಸ್ಕಾಂಗೆ ಕನ್ನಡದಲ್ಲಿ ತಾನಾಗಿಯೇ ದೂರು ನೀಡುವ AI ಧ್ವನಿ ಸಹಾಯಕ.
-            </p>
-
-            <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground">
+            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground md:text-xl">
               An AI citizen that calls BESCOM customer care, reports your outage, and answers
               every question in fluent Kannada — politely, sequentially, like a real person.
             </p>
@@ -115,6 +124,9 @@ function Home() {
                     </div>
                   </div>
                 </div>
+                <div className="mt-3 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
+                  Live Kannada conversation
+                </div>
               </div>
             </div>
           </motion.div>
@@ -136,19 +148,16 @@ function Home() {
               {
                 icon: MessageSquare,
                 title: "Sequential answers",
-                kn: "ಒಂದೊಂದಾಗಿ ಉತ್ತರ",
                 body: "Shares only the information BESCOM specifically asks for — no info dumps.",
               },
               {
                 icon: Brain,
                 title: "Stateful memory",
-                kn: "ನೆನಪಿನ ಶಕ್ತಿ",
                 body: "Remembers what's been shared, never repeats itself, handles clarifications gracefully.",
               },
               {
                 icon: Shield,
                 title: "Polite & natural",
-                kn: "ಸೌಜನ್ಯಪೂರ್ಣ",
                 body: "Natural Kannada phrasing with the politeness expected in a customer-care call.",
               },
             ].map((f) => (
@@ -160,7 +169,6 @@ function Home() {
                   <f.icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display text-xl font-semibold">{f.title}</h3>
-                <p className="mt-1 font-kannada text-sm text-muted-foreground">{f.kn}</p>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
                 <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/5 blur-2xl transition group-hover:bg-primary/15" />
               </div>
@@ -170,14 +178,23 @@ function Home() {
       </section>
 
       {/* CTA */}
-      <section className="relative py-24">
-        <div className="mx-auto max-w-3xl px-6 text-center">
+      <section className="relative overflow-hidden py-24">
+        <img
+          src={electricCurrent}
+          alt="Electric current arcing through darkness"
+          width={1280}
+          height={832}
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/70 to-background" />
+        <div className="relative mx-auto max-w-3xl px-6 text-center">
           <Zap className="mx-auto h-10 w-10 text-primary flicker" strokeWidth={2} />
           <h2 className="mt-6 font-display text-4xl font-bold tracking-tight">
             Your voice. Powered by AI.
           </h2>
-          <p className="mt-4 font-kannada text-xl text-muted-foreground">
-            ನಿಮ್ಮ ಧ್ವನಿ. AI ಯಿಂದ ಚಾಲಿತ.
+          <p className="mt-4 text-lg text-muted-foreground">
+            Let an intelligent agent handle the call while you get on with your day.
           </p>
           <Link to="/call" className="mt-8 inline-block">
             <Button
@@ -192,7 +209,7 @@ function Home() {
       </section>
 
       <footer className="border-t border-border py-8 text-center font-mono text-xs uppercase tracking-widest text-muted-foreground">
-        Made for Bengaluru · ಬೆಂಗಳೂರಿಗೆ ಮೀಸಲು
+        Made for Bengaluru
       </footer>
     </div>
   );

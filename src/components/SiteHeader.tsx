@@ -11,7 +11,7 @@ export function SiteHeader() {
           </div>
           <div className="leading-tight">
             <div className="font-display text-sm font-bold tracking-tight">BESCOM Voice Agent</div>
-            <div className="font-kannada text-[11px] text-muted-foreground">ಬೆಸ್ಕಾಂ ಧ್ವನಿ ಸಹಾಯಕ</div>
+            <div className="text-[11px] text-muted-foreground">Kannada · Bengaluru</div>
           </div>
         </Link>
         <nav className="flex items-center gap-1 text-sm">
