@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Check, ExternalLink, KeyRound } from "lucide-react";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -41,7 +41,7 @@ function SettingsPage() {
     e.preventDefault();
     saveProfile(profile);
     setSaved(true);
-    toast?.success?.("Saved", { description: "Your details are stored locally on this device." });
+    toast.success("Saved", { description: "Your details are stored locally on this device." });
     setTimeout(() => setSaved(false), 2000);
   };
 
