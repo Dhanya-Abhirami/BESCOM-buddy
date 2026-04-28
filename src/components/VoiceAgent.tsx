@@ -79,7 +79,7 @@ export function VoiceAgent() {
   useEffect(() => {
     return () => {
       if (conversation.status === "connected") {
-        conversation.endSession().catch(() => {});
+        try { void conversation.endSession(); } catch { /* noop */ }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
