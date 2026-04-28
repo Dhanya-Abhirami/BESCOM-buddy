@@ -61,7 +61,6 @@ export function VoiceAgent() {
     let cancelled = false;
     async function check() {
       try {
-        // @ts-expect-error - permissions.query microphone is widely supported
         const res = await navigator.permissions?.query?.({ name: "microphone" as PermissionName });
         if (cancelled || !res) return;
         const map = (s: PermissionState): MicPermission =>
