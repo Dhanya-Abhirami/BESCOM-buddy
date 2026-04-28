@@ -34,8 +34,8 @@ function CallPage() {
       <div className="mb-8 text-center">
         <div className="font-mono text-xs uppercase tracking-[0.3em] text-accent">Live session</div>
         <h1 className="mt-2 font-display text-4xl font-bold tracking-tight">BESCOM Voice Call</h1>
-        <p className="mt-2 font-kannada text-lg text-muted-foreground">
-          ಬೆಸ್ಕಾಂ ಜೊತೆ ಕನ್ನಡ ಸಂಭಾಷಣೆ
+        <p className="mt-2 text-base text-muted-foreground">
+          You are the BESCOM agent — the AI is the citizen reporting an outage in Kannada.
         </p>
       </div>
 
