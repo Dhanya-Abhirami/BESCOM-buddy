@@ -187,6 +187,7 @@ function FieldArea({
         onChange={(e) => onChange(e.target.value)}
         maxLength={500}
         rows={3}
+        autoComplete="off"
         className="mt-1.5 resize-none"
       />
     </div>
