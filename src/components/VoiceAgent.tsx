@@ -1,4 +1,4 @@
-import { useConversation } from "@elevenlabs/react";
+import { useConversation, ConversationProvider } from "@elevenlabs/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Phone, PhoneOff, Loader2, AlertCircle, ShieldCheck, ShieldAlert } from "lucide-react";
@@ -9,6 +9,14 @@ type Transcript = { id: string; role: "agent" | "user"; text: string };
 type MicPermission = "unknown" | "checking" | "granted" | "denied";
 
 export function VoiceAgent() {
+  return (
+    <ConversationProvider>
+      <VoiceAgentInner />
+    </ConversationProvider>
+  );
+}
+
+function VoiceAgentInner() {
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);

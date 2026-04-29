@@ -64,14 +64,11 @@ function SettingsPage() {
           <div className="space-y-5">
             <Field
               label="Full Name"
-              kn="ಪೂರ್ಣ ಹೆಸರು"
               value={profile.name}
               onChange={(v) => update("name", v)}
-              kannada
             />
             <Field
               label="Phone Number"
-              kn="ಫೋನ್ ಸಂಖ್ಯೆ"
               value={profile.phone}
               onChange={(v) => update("phone", v)}
               type="tel"
@@ -79,16 +76,13 @@ function SettingsPage() {
             />
             <FieldArea
               label="Home Address"
-              kn="ಮನೆ ವಿಳಾಸ"
               value={profile.address}
               onChange={(v) => update("address", v)}
             />
             <Field
               label="Nearest BESCOM Station"
-              kn="ಹತ್ತಿರದ ಬೆಸ್ಕಾಂ ಕೇಂದ್ರ"
               value={profile.nearestStation}
               onChange={(v) => update("nearestStation", v)}
-              kannada
             />
           </div>
         </section>
@@ -145,33 +139,26 @@ function SettingsPage() {
 
 function Field({
   label,
-  kn,
   value,
   onChange,
   type = "text",
-  kannada,
   maxLength = 200,
 }: {
   label: string;
-  kn: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
-  kannada?: boolean;
   maxLength?: number;
 }) {
   return (
     <div>
-      <Label className="flex items-baseline justify-between text-xs uppercase tracking-wider text-muted-foreground">
-        <span>{label}</span>
-        <span className="font-kannada text-[11px] normal-case tracking-normal text-muted-foreground/80">{kn}</span>
-      </Label>
+      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
       <Input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={maxLength}
-        className={`mt-1.5 ${kannada ? "font-kannada text-base" : ""}`}
+        className="mt-1.5"
       />
     </div>
   );
@@ -179,27 +166,22 @@ function Field({
 
 function FieldArea({
   label,
-  kn,
   value,
   onChange,
 }: {
   label: string;
-  kn: string;
   value: string;
   onChange: (v: string) => void;
 }) {
   return (
     <div>
-      <Label className="flex items-baseline justify-between text-xs uppercase tracking-wider text-muted-foreground">
-        <span>{label}</span>
-        <span className="font-kannada text-[11px] normal-case tracking-normal text-muted-foreground/80">{kn}</span>
-      </Label>
+      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
       <Textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={500}
         rows={3}
-        className="mt-1.5 font-kannada text-base resize-none"
+        className="mt-1.5 resize-none"
       />
     </div>
   );
