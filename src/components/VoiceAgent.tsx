@@ -9,6 +9,14 @@ type Transcript = { id: string; role: "agent" | "user"; text: string };
 type MicPermission = "unknown" | "checking" | "granted" | "denied";
 
 export function VoiceAgent() {
+  return (
+    <ConversationProvider>
+      <VoiceAgentInner />
+    </ConversationProvider>
+  );
+}
+
+function VoiceAgentInner() {
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
