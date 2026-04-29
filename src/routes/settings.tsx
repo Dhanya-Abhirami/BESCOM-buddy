@@ -55,7 +55,7 @@ function SettingsPage() {
         </p>
       </div>
 
-      <form onSubmit={onSave} className="space-y-8">
+      <form onSubmit={onSave} className="space-y-8" autoComplete="off">
         {/* Personal */}
         <section className="rounded-2xl border border-border bg-card/60 p-6">
           <h2 className="mb-1 font-display text-lg font-semibold">Personal details</h2>
@@ -163,6 +163,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={maxLength}
+        autoComplete="off"
         className="mt-1.5"
       />
     </div>
@@ -186,6 +187,7 @@ function FieldArea({
         onChange={(e) => onChange(e.target.value)}
         maxLength={500}
         rows={3}
+        autoComplete="off"
         className="mt-1.5 resize-none"
       />
     </div>
