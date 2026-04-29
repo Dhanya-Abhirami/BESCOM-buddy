@@ -100,32 +100,15 @@ function Home() {
               <div className="rounded-[20px] bg-background/40 p-6">
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 animate-pulse rounded-full bg-success" />
+                    <div className="h-2 w-2 rounded-full bg-muted-foreground" />
                     <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
                       Live transcript
                     </span>
                   </div>
-                  <span className="font-mono text-xs text-muted-foreground">00:42</span>
+                  <span className="font-mono text-xs text-muted-foreground">00:00</span>
                 </div>
-                <div className="space-y-3">
-                  <div className="flex justify-start">
-                    <div className="max-w-[80%] rounded-2xl border border-primary/30 bg-primary/15 px-4 py-2.5 font-kannada text-[15px]">
-                      ನಮಸ್ಕಾರ, ನಮ್ಮ ಪ್ರದೇಶದಲ್ಲಿ ಕರೆಂಟ್ ಇಲ್ಲ.
-                    </div>
-                  </div>
-                  <div className="flex justify-end">
-                    <div className="max-w-[80%] rounded-2xl border border-accent/30 bg-accent/15 px-4 py-2.5 font-kannada text-[15px]">
-                      ನಿಮ್ಮ ಹೆಸರು ಮತ್ತು ವಿಳಾಸ ತಿಳಿಸಿ.
-                    </div>
-                  </div>
-                  <div className="flex justify-start">
-                    <div className="max-w-[80%] rounded-2xl border border-primary/30 bg-primary/15 px-4 py-2.5 font-kannada text-[15px]">
-                      ರಮೇಶ್ ಕುಮಾರ್, ಜಯನಗರ ೪ನೇ ಬ್ಲಾಕ್‌ನಿಂದ.
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-3 text-right font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
-                  Live Kannada conversation
+                <div className="flex min-h-[10rem] items-center justify-center px-4 py-10 text-center text-sm text-muted-foreground">
+                  Configure your details in Settings, then start a call to see the live Kannada conversation here.
                 </div>
               </div>
             </div>
