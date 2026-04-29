@@ -139,33 +139,26 @@ function SettingsPage() {
 
 function Field({
   label,
-  kn,
   value,
   onChange,
   type = "text",
-  kannada,
   maxLength = 200,
 }: {
   label: string;
-  kn: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
-  kannada?: boolean;
   maxLength?: number;
 }) {
   return (
     <div>
-      <Label className="flex items-baseline justify-between text-xs uppercase tracking-wider text-muted-foreground">
-        <span>{label}</span>
-        <span className="font-kannada text-[11px] normal-case tracking-normal text-muted-foreground/80">{kn}</span>
-      </Label>
+      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
       <Input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={maxLength}
-        className={`mt-1.5 ${kannada ? "font-kannada text-base" : ""}`}
+        className="mt-1.5"
       />
     </div>
   );
@@ -173,27 +166,22 @@ function Field({
 
 function FieldArea({
   label,
-  kn,
   value,
   onChange,
 }: {
   label: string;
-  kn: string;
   value: string;
   onChange: (v: string) => void;
 }) {
   return (
     <div>
-      <Label className="flex items-baseline justify-between text-xs uppercase tracking-wider text-muted-foreground">
-        <span>{label}</span>
-        <span className="font-kannada text-[11px] normal-case tracking-normal text-muted-foreground/80">{kn}</span>
-      </Label>
+      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
       <Textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={500}
         rows={3}
-        className="mt-1.5 font-kannada text-base resize-none"
+        className="mt-1.5 resize-none"
       />
     </div>
   );
