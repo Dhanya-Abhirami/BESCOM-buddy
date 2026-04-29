@@ -31,7 +31,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BESCOM Kannada Voice Agent" },
+      { title: "BESCOM Complaint Voice Agent" },
       {
         name: "description",
         content: "AI-powered Kannada voice agent that reports power cuts to BESCOM customer care.",
@@ -39,6 +39,13 @@ export const Route = createRootRoute({
       { name: "author", content: "Lovable" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "BESCOM Complaint Voice Agent" },
+      { name: "twitter:title", content: "BESCOM Complaint Voice Agent" },
+      { name: "description", content: "Register power outage complaint using voice AI" },
+      { property: "og:description", content: "Register power outage complaint using voice AI" },
+      { name: "twitter:description", content: "Register power outage complaint using voice AI" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/bb3a93be-7898-48dc-a975-c42bc3bf02b9" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/bb3a93be-7898-48dc-a975-c42bc3bf02b9" },
     ],
     links: [
       {
