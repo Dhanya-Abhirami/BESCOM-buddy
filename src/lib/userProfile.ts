@@ -2,6 +2,7 @@ export type UserProfile = {
   name: string;
   phone: string;
   address: string;
+  location: string;
   nearestStation: string;
   agentId: string;
 };
@@ -9,10 +10,11 @@ export type UserProfile = {
 const STORAGE_KEY = "bescom-agent-profile-v1";
 
 export const defaultProfile: UserProfile = {
-  name: "ರಮೇಶ್ ಕುಮಾರ್",
-  phone: "9876543210",
-  address: "೧೨೩, ೪ನೇ ಮುಖ್ಯ ರಸ್ತೆ, ಜಯನಗರ ೪ನೇ ಬ್ಲಾಕ್, ಬೆಂಗಳೂರು - ೫೬೦೦೧೧",
-  nearestStation: "ಜಯನಗರ ಬೆಸ್ಕಾಂ ಉಪಕೇಂದ್ರ",
+  name: "",
+  phone: "",
+  address: "",
+  location: "",
+  nearestStation: "",
   agentId: "",
 };
 
