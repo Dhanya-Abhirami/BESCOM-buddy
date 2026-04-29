@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Phone, PhoneOff, Loader2, AlertCircle, ShieldCheck, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { loadProfile, buildKannadaSystemPrompt, FIRST_MESSAGE } from "@/lib/userProfile";
+import { loadProfile } from "@/lib/userProfile";
 
 type Transcript = { id: string; role: "agent" | "user"; text: string };
 type MicPermission = "unknown" | "checking" | "granted" | "denied";
@@ -121,12 +121,12 @@ function VoiceAgentInner() {
       await conversation.startSession({
         agentId: profile.agentId,
         connectionType: "webrtc",
-        overrides: {
-          agent: {
-            prompt: { prompt: buildKannadaSystemPrompt(profile) },
-            firstMessage: FIRST_MESSAGE,
-            language: "kn",
-          },
+        dynamicVariables: {
+          name: profile.name,
+          phone_number: profile.phone,
+          address: profile.address,
+          nearest_bescom_station: profile.nearestStation,
+          location: profile.address,
         },
       });
     } catch (e) {
