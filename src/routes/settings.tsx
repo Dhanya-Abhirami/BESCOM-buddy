@@ -163,6 +163,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={maxLength}
+        autoComplete="off"
         className="mt-1.5"
       />
     </div>
