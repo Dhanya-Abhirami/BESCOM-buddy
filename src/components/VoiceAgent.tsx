@@ -1,4 +1,4 @@
-import { useConversation } from "@elevenlabs/react";
+import { useConversation, ConversationProvider } from "@elevenlabs/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Phone, PhoneOff, Loader2, AlertCircle, ShieldCheck, ShieldAlert } from "lucide-react";
