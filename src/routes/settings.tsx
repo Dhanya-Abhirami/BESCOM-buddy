@@ -55,7 +55,7 @@ function SettingsPage() {
         </p>
       </div>
 
-      <form onSubmit={onSave} className="space-y-8">
+      <form onSubmit={onSave} className="space-y-8" autoComplete="off">
         {/* Personal */}
         <section className="rounded-2xl border border-border bg-card/60 p-6">
           <h2 className="mb-1 font-display text-lg font-semibold">Personal details</h2>
