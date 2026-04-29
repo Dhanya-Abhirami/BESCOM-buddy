@@ -126,7 +126,7 @@ function VoiceAgentInner() {
           phone_number: profile.phone,
           address: profile.address,
           nearest_bescom_station: profile.nearestStation,
-          location: profile.address,
+          location: profile.location,
         },
       });
     } catch (e) {

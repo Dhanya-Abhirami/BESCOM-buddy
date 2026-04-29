@@ -80,6 +80,11 @@ function SettingsPage() {
               onChange={(v) => update("address", v)}
             />
             <Field
+              label="Location (area / landmark)"
+              value={profile.location}
+              onChange={(v) => update("location", v)}
+            />
+            <Field
               label="Nearest BESCOM Station"
               value={profile.nearestStation}
               onChange={(v) => update("nearestStation", v)}
