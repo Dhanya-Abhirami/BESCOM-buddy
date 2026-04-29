@@ -64,14 +64,11 @@ function SettingsPage() {
           <div className="space-y-5">
             <Field
               label="Full Name"
-              kn="ಪೂರ್ಣ ಹೆಸರು"
               value={profile.name}
               onChange={(v) => update("name", v)}
-              kannada
             />
             <Field
               label="Phone Number"
-              kn="ಫೋನ್ ಸಂಖ್ಯೆ"
               value={profile.phone}
               onChange={(v) => update("phone", v)}
               type="tel"
@@ -79,16 +76,13 @@ function SettingsPage() {
             />
             <FieldArea
               label="Home Address"
-              kn="ಮನೆ ವಿಳಾಸ"
               value={profile.address}
               onChange={(v) => update("address", v)}
             />
             <Field
               label="Nearest BESCOM Station"
-              kn="ಹತ್ತಿರದ ಬೆಸ್ಕಾಂ ಕೇಂದ್ರ"
               value={profile.nearestStation}
               onChange={(v) => update("nearestStation", v)}
-              kannada
             />
           </div>
         </section>
