@@ -1,19 +1,52 @@
-# BESCOM Voice Agent Trainer
+# BESCOM Voice Agent
 
-A web app that lets BESCOM (Bangalore Electricity Supply Company) staff practice handling citizen calls in **Kannada**, powered by an ElevenLabs conversational AI agent. The AI plays the role of a citizen calling about an electricity issue; you respond as the BESCOM agent.
+An AI-powered voice agent that calls **BESCOM** (Bangalore Electricity Supply Company) on your behalf — in **Kannada** — so you don't have to. Report power cuts, billing issues, transformer faults, and new connection requests without sitting through IVR menus or repeating the same details every single time the lights go out.
 
-> Built with TanStack Start, React 19, Tailwind CSS v4, and the ElevenLabs React SDK.
+> Built with TanStack Start, React 19, Tailwind CSS v4, and the ElevenLabs Conversational AI SDK.
+
+---
+
+## What is BESCOM?
+
+**BESCOM** (Bangalore Electricity Supply Company Limited) is the state-owned utility that distributes electricity to Bangalore and seven surrounding districts in Karnataka, India — serving over 10 million consumers. The official helpline is **1912**.
+
+- Wikipedia: <https://en.wikipedia.org/wiki/Bangalore_Electricity_Supply_Company>
+- Official site: <https://bescom.karnataka.gov.in>
+
+---
+
+## Why this exists
+
+Electricity is a basic necessity in the 21st century. Power disruptions cost productivity, spoil food, interrupt work-from-home, halt hospitals and small businesses, and — in Bangalore's summer — make life genuinely miserable.
+
+When a cut happens, the typical citizen has to:
+
+1. Find the BESCOM number
+2. Dial and wait through a long Kannada IVR
+3. Sit on hold listening to *"ನಿಮ್ಮ ಕರೆ ನಮಗೆ ಬಹಳ ಅಮೂಲ್ಯವಾಗಿದ್ದು…"* on loop
+4. Repeat name, phone, address, area, and nearest sub-station to a human agent
+5. Describe the issue — often in a language they're not fluent in
+
+This is **boring, repetitive, and slow** — and it has to be redone every single outage. This app automates that drudgery: configure your details once, press one button, and an AI agent makes the call in fluent Kannada while you get on with your day.
+
+### Two audiences
+
+- **Citizens** — Automate the call. Skip the IVR. Stop repeating yourself.
+- **BESCOM trainees** — Use the same engine in reverse: practice handling citizen calls in Kannada with a realistic AI caller before going live on the floor.
 
 ---
 
 ## Features
 
-- **Realistic voice calls** — full-duplex WebRTC conversation with an ElevenLabs agent
-- **Live Kannada transcript** — see both sides of the conversation as it happens
-- **Conversation metrics** — live duration, agent turns, and your turns
-- **Microphone permission flow** — clear status banner and one-click request
-- **Personal context passthrough** — your name, phone, address, location, and nearest BESCOM station are sent to the agent as dynamic variables
-- **Settings persistence** — profile saved to `localStorage` (no account needed)
+- **One-tap BESCOM calls** in Kannada with full-duplex WebRTC audio
+- **Smart-dial** — dials the helpline, listens locally for the IVR hold loop using audio fingerprinting, and only spends ElevenLabs tokens once a human agent picks up
+- **Hold-time saved metric** — see how many seconds of paid agent time you avoided
+- **Live Kannada transcript** for both sides of the conversation
+- **Conversation metrics** — duration, agent turns, your turns
+- **Personal context passthrough** — name, phone, address, area, nearest sub-station sent as dynamic variables to the AI
+- **Mandatory profile fields** — no half-configured calls
+- **Local-only storage** — profile and hold-loop fingerprint stay in your browser
+- **Provider-agnostic call layer** — pluggable adapter for Twilio / Exotel / Plivo (mock provider ships by default)
 - **Themed UI** — dark, energy-grid aesthetic with semantic design tokens
 
 ---
@@ -25,10 +58,15 @@ bun install
 bun run dev
 ```
 
-Open http://localhost:3000 and:
+Open <http://localhost:3000> and:
 
-1. Go to **Settings**, enter your details and your **ElevenLabs Agent ID**
-2. Go to **Call**, allow microphone access, and press **Start Call**
+1. Open **Settings** and fill in **every field** (all are required):
+   - Name, phone, home address, area/landmark, nearest BESCOM sub-station
+   - ElevenLabs **Agent ID**
+   - BESCOM helpline number (default: `1912`)
+   - Upload a 10–30 sec recording of the BESCOM IVR hold loop (used for local fingerprinting)
+2. Open **Call**, allow microphone access, and press **Start Call**
+3. The app dials, waits silently through the hold loop, and connects the AI only when a human picks up
 
 ### Build
 
@@ -41,18 +79,33 @@ bun run preview
 
 ## ElevenLabs setup
 
-You need an ElevenLabs Conversational AI **Agent ID**.
-
-1. Create an agent at https://elevenlabs.io/app/conversational-ai
-2. In the agent's **Security** settings, allow these dynamic variables:
+1. Create a Conversational AI agent at <https://elevenlabs.io/app/conversational-ai>
+2. Configure it with a Kannada voice and a prompt that plays either:
+   - the **citizen** role (for trainee mode), or
+   - the **caller on behalf of the user** role (for citizen automation mode)
+3. In the agent's **Security** settings, allow these dynamic variables:
    - `name`
    - `phone_number`
    - `address`
    - `location`
    - `nearest_bescom_station`
-3. Copy the Agent ID into the app's **Settings** page
+4. Paste the Agent ID into the app's **Settings** page
 
-> The app does not override the agent's prompt, first message, or language — those are controlled in the ElevenLabs dashboard. Configure the agent there to speak Kannada and play the citizen role.
+---
+
+## How smart-dial works
+
+```
+[ Dial BESCOM ] → [ Audio stream ] → [ Local fingerprint match ]
+                                          │
+                          hold loop ──────┤── keep waiting (no AI tokens spent)
+                                          │
+                          human voice ────┴── connect ElevenLabs agent
+```
+
+The hold-loop reference you upload is converted to a compact landmark fingerprint (FFT + constellation peaks) and stored as base64 in `localStorage`. During a call, incoming audio is fingerprinted in short windows and compared against the reference. When similarity drops and voice activity matches a human greeting pattern, the ElevenLabs session starts. A 25-second safety fallback connects the agent if detection ever fails.
+
+All matching runs **in the browser** — no cloud ML, no per-minute fees.
 
 ---
 
@@ -61,16 +114,19 @@ You need an ElevenLabs Conversational AI **Agent ID**.
 ```
 src/
 ├── routes/
-│   ├── __root.tsx          # Root layout (html shell)
+│   ├── __root.tsx          # Root layout
 │   ├── index.tsx           # Landing page
 │   ├── call.tsx            # Live call screen
-│   └── settings.tsx        # Profile & Agent ID
+│   └── settings.tsx        # Profile, Agent ID, smart-dial config
 ├── components/
-│   ├── VoiceAgent.tsx      # Core call UI + ElevenLabs SDK wiring
+│   ├── VoiceAgent.tsx      # Call lifecycle + ElevenLabs SDK
 │   └── SiteHeader.tsx
 ├── lib/
-│   └── userProfile.ts      # localStorage profile helpers
-├── assets/                 # Hero & illustration images
+│   ├── userProfile.ts      # localStorage profile helpers
+│   ├── audioFingerprint.ts # FFT + landmark hashing
+│   ├── holdLoopDetector.ts # Live stream monitoring + VAD
+│   └── callController.ts   # Provider-agnostic dialer (mock included)
+├── assets/
 └── styles.css              # Design tokens (oklch) + Tailwind v4
 ```
 
@@ -82,7 +138,9 @@ src/
 |---|---|
 | Framework | TanStack Start v1 (Vite 7) |
 | UI | React 19, Tailwind CSS v4, shadcn/ui, Framer Motion |
-| Voice | `@elevenlabs/react` (WebRTC) |
+| Voice AI | `@elevenlabs/react` (WebRTC) |
+| Telephony | Pluggable `CallProvider` interface (mock by default; Twilio/Exotel/Plivo adapters can be added) |
+| Audio detection | Pure-JS STFT fingerprinting + RMS-based VAD |
 | Storage | Browser `localStorage` |
 | Deploy | Cloudflare Workers (`wrangler.jsonc`) |
 
@@ -90,10 +148,16 @@ src/
 
 ## Privacy
 
-All profile data lives in your browser's `localStorage`. Nothing is sent to a backend except the dynamic variables passed to your ElevenLabs agent at the start of a call.
+Everything — profile, helpline number, and hold-loop fingerprint — lives in your browser's `localStorage`. The only data that leaves your device is the dynamic-variable payload sent to your ElevenLabs agent at the start of an answered call.
+
+---
+
+## Status
+
+The default build ships with a **mock telephony provider** that simulates the BESCOM hold loop transitioning to a human, so you can exercise the full pipeline end-to-end without a PSTN account. To make real outbound calls, implement a `CallProvider` adapter (Twilio, Exotel, Plivo, etc.) and swap it in.
 
 ---
 
 ## License
 
-Internal training tool. See `PRD.md` for product requirements.
+See `PRD.md` for product requirements and roadmap.
