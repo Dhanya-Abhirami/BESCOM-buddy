@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { loadProfile, saveProfile, defaultProfile, type UserProfile } from "@/lib/userProfile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Check, ExternalLink, KeyRound } from "lucide-react";
+import { Check, ExternalLink, KeyRound, PhoneCall, Upload, Waves, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { decodeFileToMono8k, fingerprint, fpToBase64, TARGET_SR } from "@/lib/audioFingerprint";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -29,6 +30,8 @@ export const Route = createFileRoute("/settings")({
 function SettingsPage() {
   const [profile, setProfile] = useState<UserProfile>(defaultProfile);
   const [saved, setSaved] = useState(false);
+  const [fpProcessing, setFpProcessing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setProfile(loadProfile());
@@ -43,6 +46,41 @@ function SettingsPage() {
     setSaved(true);
     toast.success("Saved", { description: "Your details are stored locally on this device." });
     setTimeout(() => setSaved(false), 2000);
+  };
+
+  const onPickReference = async (file: File) => {
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("File too large", { description: "Please upload an audio clip under 2 MB." });
+      return;
+    }
+    setFpProcessing(true);
+    try {
+      const samples = await decodeFileToMono8k(file);
+      const fp = fingerprint(samples);
+      if (fp.length < 50) {
+        toast.error("Audio too short or silent", {
+          description: "Upload at least 5 seconds of the BESCOM hold loop.",
+        });
+        return;
+      }
+      const next: UserProfile = {
+        ...profile,
+        bescomHoldFingerprint: fpToBase64(fp),
+        bescomHoldDurationSec: Math.round(samples.length / TARGET_SR),
+      };
+      setProfile(next);
+      saveProfile(next);
+      toast.success("Hold-loop fingerprint saved", {
+        description: `${fp.length} landmarks from ${next.bescomHoldDurationSec}s of audio.`,
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not process audio", {
+        description: err instanceof Error ? err.message : "Unsupported format.",
+      });
+    } finally {
+      setFpProcessing(false);
+    }
   };
 
   return (
