@@ -40,7 +40,7 @@ function CallPage() {
       </div>
 
       {!profile.agentId && (
-        <div className="mb-8 flex items-start gap-3 rounded-xl border border-warning/40 bg-warning/10 p-4">
+        <div className="mb-4 flex items-start gap-3 rounded-xl border border-warning/40 bg-warning/10 p-4">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning" />
           <div className="flex-1 text-sm">
             <div className="font-semibold text-foreground">ElevenLabs Agent ID required</div>
@@ -53,6 +53,26 @@ function CallPage() {
             >
               <SettingsIcon className="h-3.5 w-3.5" />
               Open Settings
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {profile.agentId && !profile.bescomHoldFingerprint && (
+        <div className="mb-8 flex items-start gap-3 rounded-xl border border-warning/40 bg-warning/10 p-4">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning" />
+          <div className="flex-1 text-sm">
+            <div className="font-semibold text-foreground">Smart-dial not configured</div>
+            <div className="mt-1 text-muted-foreground">
+              Upload a BESCOM hold-loop recording in Settings so the app can wait for a human pickup
+              before spending ElevenLabs tokens. Without it, the agent connects immediately.
+            </div>
+            <Link
+              to="/settings"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-warning px-3 py-1.5 text-xs font-semibold text-warning-foreground"
+            >
+              <SettingsIcon className="h-3.5 w-3.5" />
+              Configure smart-dial
             </Link>
           </div>
         </div>
