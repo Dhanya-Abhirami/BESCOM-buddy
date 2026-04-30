@@ -66,6 +66,7 @@ function SettingsPage() {
               label="Full Name"
               value={profile.name}
               onChange={(v) => update("name", v)}
+              required
             />
             <Field
               label="Phone Number"
@@ -73,21 +74,25 @@ function SettingsPage() {
               onChange={(v) => update("phone", v)}
               type="tel"
               maxLength={15}
+              required
             />
             <FieldArea
               label="Home Address"
               value={profile.address}
               onChange={(v) => update("address", v)}
+              required
             />
             <Field
               label="Location (area / landmark)"
               value={profile.location}
               onChange={(v) => update("location", v)}
+              required
             />
             <Field
               label="Nearest BESCOM Station"
               value={profile.nearestStation}
               onChange={(v) => update("nearestStation", v)}
+              required
             />
           </div>
         </section>
@@ -123,6 +128,7 @@ function SettingsPage() {
               placeholder="agent_01abc..."
               className="mt-1.5 font-mono"
               maxLength={100}
+              required
             />
           </div>
         </section>
@@ -148,22 +154,28 @@ function Field({
   onChange,
   type = "text",
   maxLength = 200,
+  required = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   type?: string;
   maxLength?: number;
+  required?: boolean;
 }) {
   return (
     <div>
-      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
+      <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+        {label}
+        {required && <span className="ml-1 text-destructive">*</span>}
+      </Label>
       <Input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={maxLength}
         autoComplete="off"
+        required={required}
         className="mt-1.5"
       />
     </div>
@@ -174,20 +186,26 @@ function FieldArea({
   label,
   value,
   onChange,
+  required = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  required?: boolean;
 }) {
   return (
     <div>
-      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
+      <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+        {label}
+        {required && <span className="ml-1 text-destructive">*</span>}
+      </Label>
       <Textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         maxLength={500}
         rows={3}
         autoComplete="off"
+        required={required}
         className="mt-1.5 resize-none"
       />
     </div>
