@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { loadProfile, saveProfile, defaultProfile, type UserProfile } from "@/lib/userProfile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Check, ExternalLink, KeyRound } from "lucide-react";
+import { Check, ExternalLink, KeyRound, PhoneCall, Upload, Waves, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { decodeFileToMono8k, fingerprint, fpToBase64, TARGET_SR } from "@/lib/audioFingerprint";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -29,6 +30,8 @@ export const Route = createFileRoute("/settings")({
 function SettingsPage() {
   const [profile, setProfile] = useState<UserProfile>(defaultProfile);
   const [saved, setSaved] = useState(false);
+  const [fpProcessing, setFpProcessing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setProfile(loadProfile());
@@ -43,6 +46,41 @@ function SettingsPage() {
     setSaved(true);
     toast.success("Saved", { description: "Your details are stored locally on this device." });
     setTimeout(() => setSaved(false), 2000);
+  };
+
+  const onPickReference = async (file: File) => {
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("File too large", { description: "Please upload an audio clip under 2 MB." });
+      return;
+    }
+    setFpProcessing(true);
+    try {
+      const samples = await decodeFileToMono8k(file);
+      const fp = fingerprint(samples);
+      if (fp.length < 50) {
+        toast.error("Audio too short or silent", {
+          description: "Upload at least 5 seconds of the BESCOM hold loop.",
+        });
+        return;
+      }
+      const next: UserProfile = {
+        ...profile,
+        bescomHoldFingerprint: fpToBase64(fp),
+        bescomHoldDurationSec: Math.round(samples.length / TARGET_SR),
+      };
+      setProfile(next);
+      saveProfile(next);
+      toast.success("Hold-loop fingerprint saved", {
+        description: `${fp.length} landmarks from ${next.bescomHoldDurationSec}s of audio.`,
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not process audio", {
+        description: err instanceof Error ? err.message : "Unsupported format.",
+      });
+    } finally {
+      setFpProcessing(false);
+    }
   };
 
   return (
@@ -130,6 +168,77 @@ function SettingsPage() {
               maxLength={100}
               required
             />
+          </div>
+        </section>
+
+        {/* Smart-dial */}
+        <section className="rounded-2xl border border-border bg-card/60 p-6">
+          <div className="mb-1 flex items-center gap-2">
+            <PhoneCall className="h-4 w-4 text-accent" />
+            <h2 className="font-display text-lg font-semibold">Smart-dial</h2>
+          </div>
+          <p className="mb-5 text-sm text-muted-foreground">
+            The app dials BESCOM, listens for the IVR hold loop locally, and only spends ElevenLabs
+            tokens once a human agent picks up.
+          </p>
+
+          <div className="space-y-5">
+            <div>
+              <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                BESCOM helpline number<span className="ml-1 text-destructive">*</span>
+              </Label>
+              <Input
+                type="tel"
+                value={profile.bescomNumber}
+                onChange={(e) => update("bescomNumber", e.target.value)}
+                placeholder="1912"
+                maxLength={20}
+                autoComplete="off"
+                required
+                className="mt-1.5 font-mono"
+              />
+            </div>
+
+            <div>
+              <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                Hold-loop reference audio<span className="ml-1 text-destructive">*</span>
+              </Label>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Upload a 10–30 sec recording of the BESCOM IVR &quot;ನಿಮ್ಮ ಕರೆ ನಮಗೆ ಬಹಳ ಅಮೂಲ್ಯವಾಗಿದ್ದು…&quot; hold message. Stays on this device.
+              </p>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="audio/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) void onPickReference(f);
+                  e.target.value = "";
+                }}
+              />
+              <div className="mt-2 flex items-center gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={fpProcessing}
+                >
+                  {fpProcessing ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Upload className="mr-2 h-4 w-4" />
+                  )}
+                  {profile.bescomHoldFingerprint ? "Replace audio" : "Upload audio"}
+                </Button>
+                {profile.bescomHoldFingerprint && (
+                  <div className="flex items-center gap-1.5 text-sm text-success">
+                    <Waves className="h-4 w-4" />
+                    Fingerprinted ({profile.bescomHoldDurationSec}s)
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </section>
 

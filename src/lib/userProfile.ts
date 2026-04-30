@@ -5,6 +5,9 @@ export type UserProfile = {
   location: string;
   nearestStation: string;
   agentId: string;
+  bescomNumber: string;
+  bescomHoldFingerprint: string;     // base64-encoded Uint32Array
+  bescomHoldDurationSec: number;     // metadata only
 };
 
 const STORAGE_KEY = "bescom-agent-profile-v1";
@@ -16,6 +19,9 @@ export const defaultProfile: UserProfile = {
   location: "",
   nearestStation: "",
   agentId: "",
+  bescomNumber: "",
+  bescomHoldFingerprint: "",
+  bescomHoldDurationSec: 0,
 };
 
 export function loadProfile(): UserProfile {
